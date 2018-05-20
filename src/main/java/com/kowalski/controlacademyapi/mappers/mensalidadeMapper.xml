@@ -1,0 +1,31 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MensalidadeMapper">
+
+	<select id="findAll" resultType="com.kowalski.controlacademyapi.model.Mensalidade" parameterType="Map">
+		select m.codigo, m.data_vencimento "dataVencimento", m.data_pagamento "dataPagamento", m.valor, m.observacao
+		      ,p.codigo "pessoa.codigo"
+		from mensalidade m 
+		join pessoa p on p.codigo = m.codigo_pessoa
+		<where>
+			<if test="codigoPessoa != null">
+				and p.codigo = #{codigoPessoa}
+			</if>
+			<if test="mesVencimento != null">
+				and EXTRACT(MONTH FROM m.data_vencimento) = #{mesVencimento}
+			</if>
+			<if test="anoVencimento != null">
+				and EXTRACT(YEAR FROM m.data_vencimento) = #{anoVencimento}
+			</if>
+			
+			<if test="liquidadas != null and liquidadas == true">
+				and m.data_pagamento is not null
+			</if>
+			
+			<if test="liquidadas != null and liquidadas == false">
+				and m.data_pagamento is null
+			</if>
+		</where>
+	</select>
+
+</mapper>
