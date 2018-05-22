@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.kowalski.controlacademyapi.MensalidadeDao;
+import com.kowalski.controlacademyapi.dao.MensalidadeDao;
 import com.kowalski.controlacademyapi.model.Mensalidade;
 import com.kowalski.controlacademyapi.model.Pessoa;
 import com.kowalski.controlacademyapi.repository.MensalidadeRepository;

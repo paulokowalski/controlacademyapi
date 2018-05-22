@@ -1,4 +1,4 @@
-package com.kowalski.controlacademyapi;
+package com.kowalski.controlacademyapi.dao;
 
 import java.util.HashMap;
 import java.util.List;
