@@ -55,6 +55,7 @@ public class PessoaResource {
 	
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_PESSOA') and #oauth2.hasScope('write')")
 	public void removerPeloCodigo(@PathVariable Long codigo) {
 		pessoaRepository.deleteById(codigo);
 	}
@@ -67,7 +68,7 @@ public class PessoaResource {
 	
 	@PutMapping("/{codigo}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PreAuthorize("hasAuthority('ROLE_EDITAR_PESSOA')")
+	@PreAuthorize("hasAuthority('ROLE_EDITAR_PESSOA') and #oauth2.hasScope('write')")
 	public void editarCampoAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
 		pessoaService.atualizarPropriedadeAtivo(codigo, ativo);
 	}

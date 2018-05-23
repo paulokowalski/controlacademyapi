@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,17 +37,20 @@ public class MensalidadeResource {
 	
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_CONSULTAR_MENSALIDADE') and #oauth2.hasScope('read')")
 	public List<Mensalidade> pesquisar(MensalidadeFilter mensalidadeFilter) {
 		return mensalidadeService.pesquisar(mensalidadeFilter);
 	}
 	
 	@PutMapping("{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_PAGAR_MENSALIDADE') and #oauth2.hasScope('write')")
 	public void efetuarPagamentoMensalidade(@PathVariable Long codigo, @RequestBody LocalDate dataPagamento) {
 		mensalidadeService.efetuarPagamento(codigo, dataPagamento);
 	}
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_MENSALIDADE') and #oauth2.hasScope('write')")
 	public ResponseEntity<Mensalidade> salvarMensalidade(@Valid @RequestBody Mensalidade mensalidade, HttpServletResponse response) {
 		Mensalidade mensalidadeSalva = mensalidadeRepository.save(mensalidade);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, mensalidadeSalva.getCodigo()));
@@ -55,6 +59,7 @@ public class MensalidadeResource {
 	
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_REMOVER_MENSALIDADE') and #oauth2.hasScope('write')")
 	public void removerPeloCodigo(@PathVariable Long codigo) {
 		mensalidadeService.removerPagamento(codigo);
 	}
