@@ -1,6 +1,7 @@
 package com.kowalski.controlacademyapi.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -34,6 +35,9 @@ public class Pessoa implements Serializable {
 	private String cpf;
 	
 	@NotNull
+	private LocalDate dataNascimento;
+	
+	@NotNull
 	@Email
 	private String email;
 	
@@ -65,6 +69,14 @@ public class Pessoa implements Serializable {
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+	
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public String getEmail() {
