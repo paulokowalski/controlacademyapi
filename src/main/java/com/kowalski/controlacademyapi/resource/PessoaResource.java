@@ -1,6 +1,7 @@
 package com.kowalski.controlacademyapi.resource;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kowalski.controlacademyapi.event.RecursoCriadoEvent;
@@ -38,7 +38,23 @@ public class PessoaResource {
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_CONSULTAR_PESSOA') and #oauth2.hasScope('read')")
 	public List<Pessoa> listarTodos(){
-		return pessoaRepository.findAll();
+		return pessoaService.findAll();
+	}
+	
+	@GetMapping("/consultar/{nome}")
+	@PreAuthorize("hasAuthority('ROLE_CONSULTAR_PESSOA') and #oauth2.hasScope('read')")
+	public List<Pessoa> consultarPeloNome(@PathVariable String nome){
+		return pessoaService.findAll(nome);
+	}
+	
+	@GetMapping("/{codigo}")
+	@PreAuthorize("hasAuthority('ROLE_CONSULTAR_PESSOA') and #oauth2.hasScope('read')")
+	public ResponseEntity<Pessoa> buscarPeloCodigo(@PathVariable Long codigo) {
+		Optional<Pessoa> pessoaGet = pessoaRepository.findById(codigo);
+		if(pessoaGet.isPresent()) {
+			return new ResponseEntity<Pessoa>(pessoaGet.get(), HttpStatus.OK);
+		}
+		return ResponseEntity.notFound().build();
 	}
 	
 	@PostMapping
@@ -49,29 +65,24 @@ public class PessoaResource {
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
 	}
 	
-	@GetMapping("/{codigo}")
-	@PreAuthorize("hasAuthority('ROLE_CONSULTAR_PESSOA') and #oauth2.hasScope('read')")
-	public Pessoa buscarPeloCodigo(@PathVariable Long codigo) {
-		return pessoaRepository.findById(codigo).get();
-	}
-	
 	@DeleteMapping("/{codigo}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_REMOVER_PESSOA') and #oauth2.hasScope('write')")
-	public void removerPeloCodigo(@PathVariable Long codigo) {
-		pessoaRepository.deleteById(codigo);
+	public ResponseEntity<?> removerPeloCodigo(@PathVariable Long codigo) {
+		Optional<Pessoa> pessoaGet = pessoaRepository.findById(codigo);
+		if(pessoaGet.isPresent()) {
+			pessoaRepository.deleteById(pessoaGet.get().getCodigo());
+			return ResponseEntity.noContent().build();
+		}
+		return ResponseEntity.notFound().build();
 	}
 	
 	@PutMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_EDITAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Pessoa> editarPeloCodigo(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa) {
-		return ResponseEntity.ok(pessoaService.atualizarPessoa(codigo, pessoa));
-	}
-	
-	@PutMapping("/{codigo}/ativo")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@PreAuthorize("hasAuthority('ROLE_EDITAR_PESSOA') and #oauth2.hasScope('write')")
-	public void editarCampoAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
-		pessoaService.atualizarPropriedadeAtivo(codigo, ativo);
+		Optional<Pessoa> pessoaGet = pessoaRepository.findById(codigo);
+		if(pessoaGet.isPresent()) {
+			return ResponseEntity.ok(pessoaService.atualizarPessoa(codigo, pessoa));
+		}
+		return ResponseEntity.notFound().build();
 	}
 }

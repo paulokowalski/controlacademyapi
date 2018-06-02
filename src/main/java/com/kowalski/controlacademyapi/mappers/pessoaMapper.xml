@@ -1,0 +1,14 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kowalski.controlacademyapi.dao.PessoaMapper">
+
+	<select id="search" resultType="com.kowalski.controlacademyapi.model.Pessoa" parameterType="Map">
+		select * from pessoa p
+		<where>
+			<if test="nome != null">
+				and upper(p.nome) like upper('%${nome}%')
+			</if>
+		</where>
+	</select>
+
+</mapper>

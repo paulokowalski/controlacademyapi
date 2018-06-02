@@ -14,6 +14,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -46,7 +48,7 @@ public class Pessoa implements Serializable {
 	
 	@Embedded
 	private Endereco endereco;
-
+	
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -56,7 +58,10 @@ public class Pessoa implements Serializable {
 	}
 	
 	public String getNome() {
-		return nome;
+		if(StringUtils.isEmpty(nome)) {
+			return nome;
+		}
+		return nome.toUpperCase();
 	}
 
 	public void setNome(String nome) {
