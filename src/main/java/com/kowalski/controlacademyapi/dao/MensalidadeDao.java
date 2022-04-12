@@ -25,7 +25,6 @@ public class MensalidadeDao {
 		if(Objects.nonNull(mensalidadeFilter.getCodigoPessoa())) {
 			params.put("codigoPessoa", mensalidadeFilter.getCodigoPessoa());
 		}
-		
 		if(Objects.nonNull(mensalidadeFilter.getMesVencimento())) {
 			params.put("mesVencimento", mensalidadeFilter.getMesVencimento());
 		}
@@ -35,6 +34,6 @@ public class MensalidadeDao {
 		if(Objects.nonNull(mensalidadeFilter.isLiquidadas())) {
 			params.put("liquidadas", mensalidadeFilter.isLiquidadas());
 		}
-		return sqlSession.selectList("MensalidadeMapper.findAll", params);
+		return sqlSession.selectList("com.kowalski.controlacademyapi.mappers.mensalidadeMapper.findAll", params);
 	}
 }

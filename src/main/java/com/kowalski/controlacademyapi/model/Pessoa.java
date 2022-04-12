@@ -1,23 +1,15 @@
 package com.kowalski.controlacademyapi.model;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import org.apache.logging.log4j.util.Strings;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+import java.time.LocalDate;
 
 @Entity
 @Table(name="pessoa")
@@ -52,7 +44,7 @@ public class Pessoa implements Serializable {
 	private Endereco endereco;
 	
 	public String getNome() {
-		if(StringUtils.isEmpty(nome)) {
+		if(Strings.isBlank(nome)) {
 			return nome;
 		}
 		return nome.toUpperCase();
