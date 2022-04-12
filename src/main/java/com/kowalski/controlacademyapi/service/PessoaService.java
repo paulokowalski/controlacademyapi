@@ -1,30 +1,26 @@
 package com.kowalski.controlacademyapi.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.kowalski.controlacademyapi.model.Pessoa;
+import com.kowalski.controlacademyapi.repository.PessoaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import com.kowalski.controlacademyapi.dao.PessoaMapper;
-import com.kowalski.controlacademyapi.model.Pessoa;
-import com.kowalski.controlacademyapi.repository.PessoaRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaService {
 	
 	private @Autowired PessoaRepository pessoaRepository;
-	private @Autowired PessoaMapper mapper;
-	
+
 	public List<Pessoa> findAll(){
-		return mapper.search(null);
+		return pessoaRepository.findAll();
 	}
 	
 	public List<Pessoa> findAll(String nome){
-//		return mapper.search("%" + nome + "%");
-		return mapper.search(nome);
+		return pessoaRepository.findAll();
 	}
 	
 	public Pessoa atualizarPessoa(Long codigo, Pessoa pessoa) {

@@ -1,6 +1,5 @@
 package com.kowalski.controlacademyapi.service;
 
-import com.kowalski.controlacademyapi.dao.MensalidadeMapper;
 import com.kowalski.controlacademyapi.model.Mensalidade;
 import com.kowalski.controlacademyapi.model.Pessoa;
 import com.kowalski.controlacademyapi.repository.MensalidadeRepository;
@@ -21,10 +20,9 @@ public class MensalidadeService {
 	
 	private @Autowired MensalidadeRepository mensalidadeRepository;
 	private @Autowired PessoaRepository pessoaRepository;
-	private @Autowired MensalidadeMapper mensalidadeMapper;
-	
+
 	public List<Mensalidade> pesquisar(MensalidadeFilter mensalidadeFilter){
-		return mensalidadeMapper.findAll(mensalidadeFilter);
+		return mensalidadeRepository.findAll();
 	}
 
 	public Mensalidade buscarPessoaPeloCodigo(Long codigo) {
@@ -52,11 +50,11 @@ public class MensalidadeService {
 		if(mensalidade.isLiquidada()) {
 			throw new MensalidadeJaPagaException();
 		}
+
 		Pessoa pessoa = pessoaRepository.getOne(mensalidade.getPessoa().getCodigo());
 		if(pessoa.isInativa()) {
 			throw new PessoaInativaException();
 		}
-		
 		return mensalidade;
 	}
 }
